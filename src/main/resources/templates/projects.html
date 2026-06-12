@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Projects</title>
+</head>
+<body>
+
+<h2>My Projects</h2>
+
+<!-- CREATE -->
+<form action="/projects" method="post">
+    <input type="text" name="title" placeholder="Title" required />
+    <br>
+
+    <input type="text" name="description" placeholder="Description" required />
+    <br>
+
+    <input type="text" name="link" placeholder="Link" />
+    <br>
+
+    <button type="submit">Create</button>
+</form>
+
+<hr>
+
+<!-- TABLE -->
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Link</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.id}"></td>
+        <td th:text="${project.title}"></td>
+        <td th:text="${project.description}"></td>
+
+        <td>
+            <a th:href="${project.link}" target="_blank">Open</a>
+        </td>
+
+        <td>
+            <a th:href="@{'/projects/edit/' + ${project.id}}">Update</a>
+            <a th:href="@{'/projects/delete/' + ${project.id}}">Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
