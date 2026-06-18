@@ -7,6 +7,7 @@
 
 <h2>My Projects</h2>
 
+
 <!-- CREATE -->
 <form action="/projects" method="post">
     <input type="text" name="title" placeholder="Title" required />
@@ -16,12 +17,53 @@
     <br>
 
     <input type="text" name="link" placeholder="Link" />
-    <br>
+    <br><br>
 
-    <button type="submit">Create</button>
+    <select name="categoryId" required>
+        <option th:each="c : ${categories}"
+                th:value="${c.id}"
+                th:text="${c.name}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Add</button>
 </form>
 
 <hr>
+
+<!--SEARCH-->
+
+<form action="/projects" method="get">
+
+    <input type="text"
+           name="search"
+           placeholder="Search project">
+
+    <button type="submit">
+        Search
+    </button>
+</form>
+
+<br>
+
+<!--FILTER-->
+
+<form action ="/projects" method="get">
+
+    <select name="category">
+        <option value="">All categories</option>
+
+        <option th:each="c:${categories}"
+                th:value="${c.id}"
+                th:text="${c.name}">
+
+        </option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
 
 <!-- TABLE -->
 <table border="1">
@@ -30,7 +72,7 @@
         <th>Title</th>
         <th>Description</th>
         <th>Link</th>
-        <th>Action</th>
+        <th>Actions</th>
     </tr>
 
     <tr th:each="project : ${projects}">
@@ -43,9 +85,19 @@
         </td>
 
         <td>
-            <a th:href="@{'/projects/edit/' + ${project.id}}">Update</a>
+            <!-- EDIT -->
+            <a th:href="@{'/projects/edit/' + ${project.id}}">Edit</a>
+
+            |
+
+            <!-- DELETE -->
             <a th:href="@{'/projects/delete/' + ${project.id}}">Delete</a>
+
+            <a th:href="@{'/projects/categorize/' + ${project.id}}">Categorize</a>
+
         </td>
+
+
     </tr>
 </table>
 

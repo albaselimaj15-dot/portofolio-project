@@ -52,12 +52,11 @@ public class SkillPageController {
         return "redirect:/skills";
     }
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
+    public String editSkill(@PathVariable Long id,Model model) {
 
-        Skill skill = skillRepository.findById(id)
-                .orElseThrow();
+      Skill skill=skillRepository.findById(id).get();
 
-        model.addAttribute("skill", skill);
+      model.addAttribute("skill",skill);
 
         return "edit-skill";
     }

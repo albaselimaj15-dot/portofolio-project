@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Categorize Project</title>
+</head>
+<body>
+
+<h2>Categorize Project</h2>
+
+<h3 th:text="${project.title}"></h3>
+
+<form th:action="@{'/projects/categorize/' + ${project.id}}" method="post">
+
+    <label>Select Category:</label>
+    <br>
+
+    <select name="categoryId" required>
+        <option th:each="c : ${categories}"
+                th:value="${c.id}"
+                th:text="${c.name}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Save Category</button>
+
+</form>
+
+<br>
+
+<a href="/projects">Back</a>
+
+</body>
+</html>

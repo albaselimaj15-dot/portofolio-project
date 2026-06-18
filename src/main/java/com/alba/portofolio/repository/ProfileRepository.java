@@ -1,16 +1,12 @@
 package com.alba.portofolio.repository;
 
-import com.alba.portofolio.entity.User;
+import com.alba.portofolio.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 @Repository
-    public interface UserRepository extends JpaRepository<User,Long>{
-
-    Optional<User> findByEmail(String email);
-
-    }
-
+public interface ProfileRepository  extends JpaRepository<Profile,Long> {
+    Optional<Profile>findByUserId(Long userId);
+}

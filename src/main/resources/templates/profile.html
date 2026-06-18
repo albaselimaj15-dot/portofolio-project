@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profile</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4 text-center">
+
+        <!-- IMAGE -->
+        <img th:if="${profile.imageUrl != null}"
+             th:src="@{${profile.imageUrl}}"
+             class="rounded-circle mb-3"
+             width="150"
+             height="150"/>
+
+        <img th:if="${profile.imageUrl == null}"
+             src="https://via.placeholder.com/150"
+             class="rounded-circle mb-3"
+             width="150"
+             height="150"/>
+
+        <!-- NAME -->
+        <h2 th:text="${profile.fullName}">Full Name</h2>
+
+        <hr>
+
+        <!-- ABOUT -->
+        <div class="mt-3 p-3 bg-light rounded text-start">
+
+            <div class="fw-bold mb-2 text-muted">ABOUT</div>
+
+            <p class="mb-0" th:text="${profile.about}"></p>
+
+        </div>
+
+
+
+
+
+</body>
+</html>

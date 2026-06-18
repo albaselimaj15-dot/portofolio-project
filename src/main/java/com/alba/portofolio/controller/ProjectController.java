@@ -1,9 +1,11 @@
 package com.alba.portofolio.controller;
 
+import com.alba.portofolio.entity.Category;
 import com.alba.portofolio.entity.Project;
 import com.alba.portofolio.entity.User;
 
 
+import com.alba.portofolio.repository.CategoryRepository;
 import com.alba.portofolio.repository.ProjectRepository;
 import com.alba.portofolio.repository.UserRepository;
 
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @Controller
 @RequestMapping("/projects")
 public class ProjectController {
@@ -21,35 +26,83 @@ public class ProjectController {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final ProjectService projectService;
+    private final CategoryRepository categoryRepository;
 
-    public ProjectController(ProjectRepository projectRepository, UserRepository userRepository, ProjectService projectService) {
+    public ProjectController(ProjectRepository projectRepository, UserRepository userRepository, ProjectService projectService, CategoryRepository categoryRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.projectService = projectService;
+        this.categoryRepository = categoryRepository;
     }
-
     @GetMapping
-    public String getProjects(Model model, Authentication auth) {
+    public String getProjects(@RequestParam(required = false) String category,@RequestParam(required=false)
+                              String search,
+                              Model model,
+                              Authentication auth) {
 
         if (auth == null || !auth.isAuthenticated()) {
             return "redirect:/login";
         }
 
-        String email = auth.getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(auth.getName()).orElseThrow();
 
+        List<Project> projects;
 
-        model.addAttribute("projects", projectRepository.findAllByUser(user));
+        if(search!=null&&!search.isBlank()){
+            System.out.println("SEARCH="+search);
+            projects=projectRepository.findAllByUserAndTitleContainingIgnoreCase(user,search);
+            System.out.println("PROJECTS FOUND="+projects.size());
+        }
 
+        else if (category != null&&!category.isBlank()) {
+            Long categoryId = Long.parseLong(category);
+
+            Category cat = categoryRepository.findById(categoryId)
+                    .orElseThrow();
+
+            projects = projectRepository.findAllByUserAndCategory(user, cat);
+        } else {
+            projects = projectRepository.findAllByUser(user);
+        }
+
+        model.addAttribute("projects", projects);
+        model.addAttribute("categories",categoryRepository.findAll());
         return "projects";
     }
+    @GetMapping("/categories")
+    public String categoriesPage(Model model){
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "categories";
+    }
+    @GetMapping("/categorize/{id}")
+    public String categorizePage(@PathVariable Long id, Model model) {
+
+        Project project = projectService.findById(id);
+
+        model.addAttribute("project", project);
+        model.addAttribute("categories", categoryRepository.findAll());
+
+        return "categorize";
+    }
+    @PostMapping("/categorize/{id}")
+    public String updateCategory(@PathVariable Long id,
+                             @RequestParam Long categoryId) {
+
+        Category category=categoryRepository.findById(categoryId).orElseThrow();
+
+        projectService.updateCategory(id, category);
+        return "redirect:/projects";
+    }
     @PostMapping
-    public String create(@ModelAttribute Project project, Authentication auth) {
+    public String create(@ModelAttribute Project project,  @RequestParam Long categoryId,Authentication auth) {
 
         if (auth == null || !auth.isAuthenticated()) {
             return "redirect:/login";
         }
-
+        User user=userRepository.findByEmail(auth.getName()).orElseThrow();
+      Category category=categoryRepository.findById(categoryId).orElseThrow();
+      project.setUser(user);
+        project.setCategory(category);
         projectService.add(project);
 
         return "redirect:/projects";

@@ -1,5 +1,6 @@
 package com.alba.portofolio.entity;
 
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -22,7 +23,15 @@ public class Project {
     @NotBlank
     private String link;
 
+
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private Category category;
+
+
 }

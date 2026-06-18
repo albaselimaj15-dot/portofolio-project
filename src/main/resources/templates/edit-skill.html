@@ -21,9 +21,21 @@
     <br><br>
 
     <label>Level:</label>
-    <input type="number"
-           name="level"
-           th:value="${skill.level}" />
+    <select name="level">
+
+        <option th:selected="${skill.level=='BEGINNER'}">
+            BEGINNER
+        </option>
+
+        <option th:selected="${skill.level=='INTERMEDIATE'}">
+            INTERMEDIATE
+        </option>
+
+        <option th:selected="${skill.level=='ADVANCED'}">
+            ADVANCED
+        </option>
+
+    </select>
 
     <br><br>
 

@@ -1,10 +1,10 @@
 package com.alba.portofolio.service;
 
+import com.alba.portofolio.entity.Category;
 import com.alba.portofolio.entity.Project;
 import com.alba.portofolio.entity.User;
 import com.alba.portofolio.repository.ProjectRepository;
 import com.alba.portofolio.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -37,14 +37,15 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public Project update(Long id,Project newproject){
-        Project project =projectRepository.findById(id).orElseThrow(()->new RuntimeException("Skill not found"));
+    public void update(Long id, Project newproject) {
+        Project existing = projectRepository.findById(id).orElseThrow(() -> new RuntimeException("Skill not found"));
 
-        project.setDescription(newproject.getDescription());
-        project.setLink(newproject.getLink());
-        project.setTitle(newproject.getTitle());
+        existing.setDescription(newproject.getDescription());
+        existing.setLink(newproject.getLink());
+        existing.setTitle(newproject.getTitle());
+        existing.setCategory(newproject.getCategory());
 
-        return projectRepository.save(project);
+        projectRepository.save(existing);
     }
 
     public void save(Project project, String email) {
@@ -56,18 +57,28 @@ public class ProjectService {
 
         projectRepository.save(project);
     }
-    public List<Project>getAll(){
-        return  projectRepository.findAll();
+
+    public List<Project> getAll() {
+        return projectRepository.findAll();
     }
 
-    public Project getById(Long id){
-        return projectRepository.findById(id).orElseThrow(()->new RuntimeException("Project not found"));
+    public Project getById(Long id) {
+        return projectRepository.findById(id).orElseThrow(() -> new RuntimeException("Project not found"));
     }
 
-    public void delete (long id){
-         projectRepository.deleteById(id);
+    public void delete(long id) {
+        projectRepository.deleteById(id);
     }
 
 
+    public Project findById(Long id) {
+        return projectRepository.findById(id).orElseThrow(() -> new RuntimeException("Project not found"));
+    }
 
+    public void updateCategory(Long id, Category category) {
+        Project project=projectRepository.findById(id).orElseThrow(()->new RuntimeException("Project not found"));
+        project.setCategory(category);
+        projectRepository.save(project);
+
+    }
 }

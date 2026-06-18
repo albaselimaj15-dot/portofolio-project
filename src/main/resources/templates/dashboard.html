@@ -10,7 +10,7 @@
 
 <body class="bg-light">
 
-<!-- NAVBAR -->
+<!-- NAVBAR (HEADER) -->
 <nav class="navbar navbar-dark bg-dark px-3">
     <span class="navbar-brand">Portfolio System</span>
 
@@ -19,40 +19,75 @@
     </form>
 </nav>
 
-<!-- MAIN CONTAINER -->
-<div class="container mt-5">
+<div class="container-fluid">
 
-    <!-- WELCOME CARD -->
-    <div class="card shadow-sm p-4 mb-4">
-
-        <h3>
-            Welcome,
-            <span class="text-primary" th:text="${user}">User</span>!
-        </h3>
-
-        <p class="text-muted">Manage your portfolio efficiently</p>
-
-    </div>
-
-    <!-- ACTION CARDS -->
     <div class="row">
 
-        <!-- Projects -->
-        <div class="col-md-6 mb-3">
-            <div class="card shadow-sm p-3">
-                <h5>Projects</h5>
-                <p>Manage your portfolio projects</p>
-                <a href="/projects" class="btn btn-success">Go to projects</a>
-            </div>
+        <!-- SlIDEBAR -->
+        <div class="col-md-2 bg-dark text-white min-vh-100 p-3">
+
+            <h5 class="mb-4">Menu</h5>
+
+
+            <a class="text-white d-block mb-2" href="/projects">Projects</a>
+            <a class="text-white d-block mb-2" href="/skills">Skills</a>
+            <a class="text-white d-block mb-2" href="/profile">Profile</a>
+
         </div>
 
-        <!-- Skills -->
-        <div class="col-md-6 mb-3">
-            <div class="card shadow-sm p-3">
-                <h5>Skills</h5>
-                <p>Manage your technical skills</p>
-                <a href="/skills" class="btn btn-success">Go to Skills</a>
+        <!-- MAIN CONTENT -->
+        <div class="col-md-10">
+
+            <div class="container mt-5">
+
+
+                <div class="card shadow-sm p-4 mb-4">
+
+                    <h3>
+                        Welcome,
+                        <span class="text-primary" th:text="${user}">User</span>!
+                    </h3>
+
+                    <p class="text-muted">Manage your portfolio efficiently</p>
+
+                </div>
+
+                <!-- STATISTICS CARDS -->
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm p-3 text-center">
+                            <h5>Total Projects</h5>
+                            <h2 th:text="${projectCount}">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm p-3 text-center">
+                            <h5>Total Skills</h5>
+                            <h2 th:text="${skillCount}">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm p-3 text-center">
+                            <h5>Profile</h5>
+                            <h2 th:text="${profileCount}">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm p-3 text-center">
+                                <h5 class="card-title">Categories</h5>
+                                <h2 th:text="${categoryCount}">0</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
 
     </div>
