@@ -1,7 +1,8 @@
 package com.alba.portofolio.service;
 
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Skill;
-import com.alba.portofolio.entity.User;
+
 import com.alba.portofolio.repository.SkillRepository;
 import com.alba.portofolio.repository.UserRepository;
 
@@ -37,7 +38,7 @@ public class SkillService {
     }
     public Skill updateWithUser(Skill newSkill, String email) {
 
-        User user = userRepository.findByEmail(email)
+        AppUser user = userRepository.findByEmail(email)
                 .orElseThrow();
 
         Skill skill = skillRepository.findById(newSkill.getId())

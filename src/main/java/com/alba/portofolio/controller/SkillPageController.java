@@ -1,10 +1,12 @@
 package com.alba.portofolio.controller;
 
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Skill;
-import com.alba.portofolio.entity.User;
+import com.alba.portofolio.enums.Role;
 import com.alba.portofolio.repository.SkillRepository;
 import com.alba.portofolio.repository.UserRepository;
 import com.alba.portofolio.service.SkillService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,13 +30,18 @@ public class SkillPageController {
     public String getSkills(Model model, Authentication auth) {
 
         String email = auth.getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
+        AppUser user = userRepository.findByEmail(email).orElseThrow();
+        if (user.getRole() == Role.ADMIN) {
+            model.addAttribute("skills", skillRepository.findAll());
+        } else {
+            model.addAttribute("skills", skillRepository.findByUserId(user.getId()));
+        }
 
-        model.addAttribute("skills", skillRepository.findByUserId(user.getId()));
 
         return "skills";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public String createSkill(@ModelAttribute Skill skill, Authentication auth) {
 
@@ -43,7 +50,7 @@ public class SkillPageController {
         }
 
         String email = auth.getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
+        AppUser user = userRepository.findByEmail(email).orElseThrow();
 
         skill.setUser(user);
 
@@ -51,6 +58,7 @@ public class SkillPageController {
 
         return "redirect:/skills";
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/edit/{id}")
     public String editSkill(@PathVariable Long id,Model model) {
 
@@ -60,6 +68,7 @@ public class SkillPageController {
 
         return "edit-skill";
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/update")
     public String update(@ModelAttribute Skill skill,
                          Authentication auth) {
@@ -70,7 +79,7 @@ public class SkillPageController {
 
         return "redirect:/skills";
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
 

@@ -1,6 +1,6 @@
 package com.alba.portofolio.service;
 
-import com.alba.portofolio.entity.User;
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         System.out.println("LOGIN EMAIL: " + email);
 
-        User user = userRepository.findByEmail(email.trim().toLowerCase())
+        AppUser user = userRepository.findByEmail(email.trim().toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         System.out.println("USER FOUND: " + user.getEmail());
@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
                 .password(user.getPassword())
-                .roles("USER")
+                .roles(user.getRole().name())
                 .build();
     }
 }

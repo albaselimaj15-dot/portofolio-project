@@ -1,14 +1,15 @@
 package com.alba.portofolio.controller;
 
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Profile;
-import com.alba.portofolio.entity.User;
+
+import com.alba.portofolio.enums.Role;
 import com.alba.portofolio.repository.*;
 
 import com.alba.portofolio.service.ProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,7 +53,7 @@ public class ViewController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user) {
+    public String register(@ModelAttribute AppUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return "redirect:/login";
@@ -63,10 +64,13 @@ public class ViewController {
 
         String email = auth.getName();
 
-        User user = userRepository.findByEmail(email)
+        AppUser user = userRepository.findByEmail(email)
                 .orElseThrow();
 
         model.addAttribute("user", user.getUsername());
+
+        model.addAttribute("isAdmin",
+                user.getRole() == Role.ADMIN);
 
         model.addAttribute("projectCount", projectRepository.count());
         model.addAttribute("skillCount", skillRepository.count());
@@ -80,6 +84,8 @@ public class ViewController {
 
         Profile profile = profileService.getProfileByUser(auth.getName());
         profile.setImageUrl("/images.jpg");
+
+
 
         model.addAttribute("profile", profile);
 

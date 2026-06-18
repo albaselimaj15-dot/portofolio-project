@@ -1,9 +1,10 @@
 package com.alba.portofolio.service;
 
-import com.alba.portofolio.entity.User;
+import com.alba.portofolio.entity.AppUser;
+
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers();
+    List<AppUser> getAllUsers();
 }

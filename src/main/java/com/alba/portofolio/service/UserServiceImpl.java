@@ -1,6 +1,6 @@
 package com.alba.portofolio.service;
 
-import com.alba.portofolio.entity.User;
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<AppUser> getAllUsers() {
         return userRepository.findAll();
     }
 }

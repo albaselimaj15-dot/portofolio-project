@@ -1,7 +1,7 @@
 package com.alba.portofolio.service;
 
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Profile;
-import com.alba.portofolio.entity.User;
 import com.alba.portofolio.repository.ProfileRepository;
 import com.alba.portofolio.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class ProfileService {
     private final UserRepository userRepository;
 
     public Profile getProfileByUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        AppUser user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         return profileRepository.findByUserId(user.getId()).orElse(new Profile());
     }
 }

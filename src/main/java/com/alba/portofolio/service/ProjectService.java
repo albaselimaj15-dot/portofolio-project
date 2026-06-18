@@ -1,8 +1,8 @@
 package com.alba.portofolio.service;
 
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Category;
 import com.alba.portofolio.entity.Project;
-import com.alba.portofolio.entity.User;
 import com.alba.portofolio.repository.ProjectRepository;
 import com.alba.portofolio.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +29,7 @@ public class ProjectService {
                 .getAuthentication()
                 .getName();
 
-        User user = userRepository.findByEmail(email)
+        AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found: " + email));
 
         project.setUser(user);
@@ -50,7 +50,7 @@ public class ProjectService {
 
     public void save(Project project, String email) {
 
-        User user = userRepository.findByEmail(email)
+        AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found: " + email));
 
         project.setUser(user);

@@ -1,15 +1,17 @@
 package com.alba.portofolio.controller;
 
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Category;
 import com.alba.portofolio.entity.Project;
-import com.alba.portofolio.entity.User;
 
 
+import com.alba.portofolio.enums.Role;
 import com.alba.portofolio.repository.CategoryRepository;
 import com.alba.portofolio.repository.ProjectRepository;
 import com.alba.portofolio.repository.UserRepository;
 
 import com.alba.portofolio.service.ProjectService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Controller;
@@ -44,29 +46,45 @@ public class ProjectController {
             return "redirect:/login";
         }
 
-        User user = userRepository.findByEmail(auth.getName()).orElseThrow();
+        AppUser user = userRepository.findByEmail(auth.getName()).orElseThrow();
+        boolean isAdmin = user.getRole() == Role.ADMIN;
 
         List<Project> projects;
 
-        if(search!=null&&!search.isBlank()){
-            System.out.println("SEARCH="+search);
-            projects=projectRepository.findAllByUserAndTitleContainingIgnoreCase(user,search);
-            System.out.println("PROJECTS FOUND="+projects.size());
-        }
+        if(search!=null&&!search.isBlank()) {
+            System.out.println("SEARCH=" + search);
+            if (isAdmin) {
+                projects = projectRepository.findByTitleContainingIgnoreCase(search);
+            }else {
+                projects = projectRepository.findAllByUserAndTitleContainingIgnoreCase(user, search);
+                System.out.println("PROJECTS FOUND=" + projects.size());
+            }
 
-        else if (category != null&&!category.isBlank()) {
+        }else if (category != null&&!category.isBlank()) {
             Long categoryId = Long.parseLong(category);
 
             Category cat = categoryRepository.findById(categoryId)
                     .orElseThrow();
 
-            projects = projectRepository.findAllByUserAndCategory(user, cat);
+            if (isAdmin) {
+                projects = projectRepository.findAllByCategory(cat);
+            } else {
+                projects = projectRepository.findAllByUserAndCategory(user, cat);
+            }
+
         } else {
-            projects = projectRepository.findAllByUser(user);
+
+            if (isAdmin) {
+                projects = projectRepository.findAll();
+            } else {
+                projects = projectRepository.findAllByUser(user);
+            }
         }
 
         model.addAttribute("projects", projects);
-        model.addAttribute("categories",categoryRepository.findAll());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("isAdmin", isAdmin);
+
         return "projects";
     }
     @GetMapping("/categories")
@@ -84,6 +102,7 @@ public class ProjectController {
 
         return "categorize";
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/categorize/{id}")
     public String updateCategory(@PathVariable Long id,
                              @RequestParam Long categoryId) {
@@ -93,13 +112,14 @@ public class ProjectController {
         projectService.updateCategory(id, category);
         return "redirect:/projects";
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public String create(@ModelAttribute Project project,  @RequestParam Long categoryId,Authentication auth) {
 
         if (auth == null || !auth.isAuthenticated()) {
             return "redirect:/login";
         }
-        User user=userRepository.findByEmail(auth.getName()).orElseThrow();
+        AppUser user=userRepository.findByEmail(auth.getName()).orElseThrow();
       Category category=categoryRepository.findById(categoryId).orElseThrow();
       project.setUser(user);
         project.setCategory(category);
@@ -107,6 +127,7 @@ public class ProjectController {
 
         return "redirect:/projects";
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
 
@@ -117,6 +138,7 @@ public class ProjectController {
 
         return "edit-project";
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/update")
     public String update(@ModelAttribute Project project) {
 
@@ -124,6 +146,8 @@ public class ProjectController {
 
         return "redirect:/projects";
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
 

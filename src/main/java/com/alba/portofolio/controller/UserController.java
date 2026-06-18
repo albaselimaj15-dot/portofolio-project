@@ -1,8 +1,9 @@
 package com.alba.portofolio.controller;
 
 
-import com.alba.portofolio.entity.User;
-import com.alba.portofolio.repository.UserRepository;
+import com.alba.portofolio.entity.AppUser;
+
+
 
 import com.alba.portofolio.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<AppUser>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 

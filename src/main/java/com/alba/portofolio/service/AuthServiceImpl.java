@@ -4,7 +4,7 @@ import com.alba.portofolio.dto.request.LoginRequest;
 import com.alba.portofolio.dto.request.RegisterRequest;
 import com.alba.portofolio.dto.response.LoginResponse;
 import com.alba.portofolio.dto.response.RegisterResponse;
-import com.alba.portofolio.entity.User;
+import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,12 +24,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public RegisterResponse register(RegisterRequest request) {
 
-        User user = new User();
+        AppUser user = new AppUser();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        User savedUser = userRepository.save(user);
+        AppUser savedUser = userRepository.save(user);
 
         return new RegisterResponse(
                 savedUser.getId(),
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        User dbUser = userRepository.findByEmail(request.getEmail())
+        AppUser dbUser = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), dbUser.getPassword())) {

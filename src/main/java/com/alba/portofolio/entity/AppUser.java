@@ -1,6 +1,7 @@
 package com.alba.portofolio.entity;
 
 
+import com.alba.portofolio.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name="users")
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -27,6 +28,8 @@ public class User {
     private String email;
 
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     private List<Skill> skills;

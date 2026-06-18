@@ -8,7 +8,7 @@
 <h2>My Projects</h2>
 
 
-<!-- CREATE -->
+<div th:if="${isAdmin}">
 <form action="/projects" method="post">
     <input type="text" name="title" placeholder="Title" required />
     <br>
@@ -30,6 +30,8 @@
 
     <button type="submit">Add</button>
 </form>
+
+</div>
 
 <hr>
 
@@ -72,7 +74,7 @@
         <th>Title</th>
         <th>Description</th>
         <th>Link</th>
-        <th>Actions</th>
+        <th th:if="${isAdmin}">Actions</th>
     </tr>
 
     <tr th:each="project : ${projects}">
@@ -86,6 +88,7 @@
 
         <td>
             <!-- EDIT -->
+            <div th:if="${isAdmin}">
             <a th:href="@{'/projects/edit/' + ${project.id}}">Edit</a>
 
             |
@@ -95,11 +98,13 @@
 
             <a th:href="@{'/projects/categorize/' + ${project.id}}">Categorize</a>
 
-        </td>
+
+            </div>
 
 
     </tr>
 </table>
+
 
 </body>
 </html>
