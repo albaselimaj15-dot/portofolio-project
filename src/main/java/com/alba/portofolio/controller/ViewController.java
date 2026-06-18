@@ -70,7 +70,6 @@ public class ViewController {
 
         model.addAttribute("projectCount", projectRepository.count());
         model.addAttribute("skillCount", skillRepository.count());
-        model.addAttribute("profileCount", profileRepository.count());
         model.addAttribute("categoryCount",categoryRepository.count());
 
         return "dashboard";
