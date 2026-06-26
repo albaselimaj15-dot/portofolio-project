@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -51,7 +52,7 @@ public class ProjectController {
 
     // LIST PAGE
     @GetMapping
-    public String getProjects(@RequestParam(required = false) List<Long> skillId,
+    public String getProjects(@RequestParam(required = false) List<Long> skillIds,
                               @RequestParam(required = false) Long categoryId,
                               @RequestParam(required = false) String search,
                               Model model,
@@ -64,7 +65,7 @@ public class ProjectController {
         AppUser user = userRepository.findByEmail(auth.getName())
                 .orElseThrow();
 
-        List<Project> projects = projectService.filterPublic(search, categoryId,  skillId);
+        List<Project> projects = projectService.filterPublic(search, categoryId,  skillIds);
 
         model.addAttribute("projects", projects);
         model.addAttribute("skills", skillRepository.findAll());
@@ -79,10 +80,22 @@ public class ProjectController {
     @PostMapping
     public String createProject(@ModelAttribute ProjectDto dto,
                                 @RequestParam Long categoryId,
+                                @RequestParam(required = false) List<Long> skillIds,
                                 @RequestParam("image") MultipartFile image,
                                 Authentication auth) throws IOException {
 
-        projectService.createProject(dto, categoryId, image, auth.getName());
+        // mbrojtje nëse vjen null nga form
+        if (skillIds == null) {
+            skillIds = new ArrayList<>();
+        }
+
+        projectService.createProject(
+                dto,
+                categoryId,
+                skillIds,
+                image,
+                auth.getName()
+        );
 
         activityService.log("Project created by " + auth.getName());
 
@@ -140,4 +153,5 @@ public class ProjectController {
         projectService.assignSkills(id,skillId);
         return "redirect:/projects";
     }
+
 }

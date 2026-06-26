@@ -9,27 +9,22 @@
 
 <h2 class="mb-3">My Projects</h2>
 
-<!-- ================= ADMIN CREATE FORM ================= -->
+<!-- ================= CREATE FORM ================= -->
 <div th:if="${isAdmin}" class="card p-3 mb-4">
 
     <h5>Add New Project</h5>
+
     <form action="/projects" method="post" enctype="multipart/form-data">
 
-        <!-- TITLE -->
-        <input type="text" name="title" placeholder="Title" required>
-        <br><br>
+        <input type="text" name="title" class="form-control mb-2" placeholder="Title" required>
 
-        <!-- DESCRIPTION -->
-        <input type="text" name="description" placeholder="Description" required>
-        <br><br>
+        <input type="text" name="description" class="form-control mb-2" placeholder="Description" required>
 
-        <!-- LINK -->
-        <input type="text" name="link" placeholder="Link">
-        <br><br>
+        <input type="text" name="link" class="form-control mb-2" placeholder="Link">
 
-        <!-- CATEGORY (vetëm 1) -->
+        <!-- CATEGORY -->
         <label>Category</label>
-        <select name="categoryId" required>
+        <select name="categoryId" class="form-select mb-2" required>
             <option value="">Select Category</option>
             <option th:each="c : ${categories}"
                     th:value="${c.id}"
@@ -37,23 +32,19 @@
             </option>
         </select>
 
-        <br><br>
+        <!-- SKILLS (MULTI) -->
+        <label>Skills</label>
+        <select name="skillIds" class="form-select mb-2" multiple>
+            <option th:each="s : ${skills}"
+                    th:value="${s.id}"
+                    th:text="${s.name}">
+            </option>
+        </select>
 
-        <!-- SKILLS (multi) -->
-        <div>
-            <label>Skills</label>
-            <select name="skillId">
-                <option value="">Select Skills</option>
-                <option th:each="s : ${skills}"
-                        th:value="${s.id}"
-                        th:text="${s.name}">
-                </option>
-            </select>
-        </div>
+        <!-- IMAGE -->
+        <input type="file" name="image" class="form-control mb-2">
 
-        <br><br>
-
-        <button type="submit">Add Project</button>
+        <button type="submit" class="btn btn-success">Add Project</button>
 
     </form>
 
@@ -64,46 +55,26 @@
 
     <form method="get" action="/projects">
 
-        <div class="row g-2">
+        <input type="text" name="search" class="form-control mb-2" placeholder="Search...">
 
-            <!-- SEARCH -->
-            <div class="col-md-4">
-                <input type="text"
-                       name="search"
-                       class="form-control"
-                       placeholder="Search projects...">
-            </div>
+        <!-- CATEGORY FILTER -->
+        <select name="categoryId" class="form-select mb-2">
+            <option value="">All Categories</option>
+            <option th:each="c : ${categories}"
+                    th:value="${c.id}"
+                    th:text="${c.name}">
+            </option>
+        </select>
 
-            <!-- CATEGORY -->
-            <div class="col-md-3">
-                <select name="categoryId" class="form-select">
-                    <option value="">All Categories</option>
-                    <option th:each="c : ${categories}"
-                            th:value="${c.id}"
-                            th:text="${c.name}">
-                    </option>
-                </select>
-            </div>
+        <!-- SKILLS FILTER -->
+        <select name="skillIds" class="form-select mb-2" multiple>
+            <option th:each="s : ${skills}"
+                    th:value="${s.id}"
+                    th:text="${s.name}">
+            </option>
+        </select>
 
-            <!-- SKILL -->
-            <div class="col-md-3">
-                <select name="skillId" class="form-select">
-                    <option value="">All Skills</option>
-                    <option th:each="s : ${skills}"
-                            th:value="${s.id}"
-                            th:text="${s.name}">
-                    </option>
-                </select>
-            </div>
-
-            <!-- BUTTON -->
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">
-                    Filter
-                </button>
-            </div>
-
-        </div>
+        <button class="btn btn-primary">Filter</button>
 
     </form>
 
@@ -141,15 +112,10 @@
                  width="80">
         </td>
 
-        <!-- ADMIN ACTIONS -->
         <td th:if="${isAdmin}">
-
-            <a th:href="@{'/projects/edit/' + ${project.id}}">Edit</a>
-            |
-            <a th:href="@{'/projects/delete/' + ${project.id}}">Delete</a>
-            |
+            <a th:href="@{'/projects/edit/' + ${project.id}}">Edit</a> |
+            <a th:href="@{'/projects/delete/' + ${project.id}}">Delete</a> |
             <a th:href="@{'/projects/' + ${project.id} + '/categorize'}">Categorize</a>
-
         </td>
 
     </tr>

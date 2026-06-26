@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,11 +42,11 @@ public class Project {
 
     @ManyToMany
     @JoinTable(
-            name="project_skills",
-            joinColumns =@JoinColumn(name="project_id"),
-            inverseJoinColumns = @JoinColumn(name="skill_id")
+            name = "project_skills",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
-    private List<Skill> skills;
+    private List<Skill> skills = new ArrayList<>();
 
     @Override
     public String toString() {

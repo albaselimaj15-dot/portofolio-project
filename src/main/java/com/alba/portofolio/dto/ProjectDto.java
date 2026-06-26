@@ -15,6 +15,6 @@ public class ProjectDto {
     private String description;
     private String link;
     private String imageUrl;
-    private List<Long>skillId;
+    private List<Long>skillIds;
     private Long categoryId;
 }

@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-
     <title>Categories</title>
 </head>
 <body>
 
 <h2>Category Form</h2>
 
+<!-- FORM -->
 <form th:action="@{/categories/save}" th:object="${category}" method="post">
 
-    <!--hidden id for edit-->
+    <input type="hidden" th:field="*{id}"/>
 
-    <input type ="hidden" th:field="*{id}"/>
+    <input type="text"
+           th:field="*{name}"
+           placeholder="Category name"
+           required/>
 
-    <input type ="text" th:field="*{name}" placeholder="Category name"/>
-
-    <button type ="submit">Save</button>
+    <button type="submit">Save</button>
 </form>
 
 <hr>
 
+
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+<p th:if="${success}" th:text="${success}" style="color:green;"></p>
+
 <h2>Categories List</h2>
 
 <ul>
-    <li th:each="c:${categories}">
+    <li th:each="c : ${categories}">
+
         <span th:text="${c.name}"></span>
 
-        <a th:ref="@{'/categories/edit/' +${c.id}}" >Edit</a>
+        <a th:href="@{'/categories/edit/' + ${c.id}}">Edit</a>
 
-        <!--Delete-->
+        <a th:href="@{'/categories/delete/' + ${c.id}}"
+           onclick="return confirm('Are you sure?')">
+            Delete
+        </a>
 
-        <form th:action="@{'/categories/delete/' +${c.id}}"
-              method="post"
-              style="display:inline">
-
-            <input type="hidden" name="_method" value="delete"/>
-
-            <button type="submit">
-                Delete
-            </button>
-        </form>
     </li>
-
 </ul>
+
 </body>
 </html>

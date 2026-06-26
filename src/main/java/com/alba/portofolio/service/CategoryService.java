@@ -6,27 +6,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
-
-    public List<Category>getAll(){
+    public List<Category> getAll() {
         return categoryRepository.findAll();
     }
 
-    public void save (Category category){
+    public Category getById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+    }
+
+    public void save(Category category) {
         categoryRepository.save(category);
     }
+    public void delete(Long id) {
 
-    public Category getById(Long id){
-        return categoryRepository.findById(id).orElse(null);
-    }
+        Category category = categoryRepository.findById(id)
+                .orElseThrow();
 
-    public void delete (Long id){
-        categoryRepository.deleteById(id);
+        if (category.getProjects() != null && !category.getProjects().isEmpty()) {
+            throw new IllegalStateException("Category cannot be deleted because it has projects");
+        }
+
+        categoryRepository.delete(category);
     }
 }

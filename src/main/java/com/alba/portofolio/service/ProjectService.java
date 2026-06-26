@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class ProjectService {
@@ -38,19 +39,22 @@ public class ProjectService {
         this.categoryRepository = categoryRepository;
     }
 
-    // CREATE FULL FLOW
+    // CREATE
     public Project createProject(ProjectDto dto,
                                  Long categoryId,
+                                 List<Long> skillIds,
                                  MultipartFile image,
                                  String email) throws IOException {
 
-        AppUser user = userRepository.findByEmail(email)
-                .orElseThrow();
+        AppUser user = userRepository.findByEmail(email).orElseThrow();
 
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow();
+        Category category = categoryRepository.findById(categoryId).orElseThrow();
 
-        List<Skill> skills = skillRepository.findAllById(dto.getSkillId());
+        List<Skill> skills = new ArrayList<>();
+
+        if (skillIds != null && !skillIds.isEmpty()) {
+            skills = skillRepository.findAllById(skillIds);
+        }
 
         Project project = new Project();
         project.setTitle(dto.getTitle());
@@ -58,9 +62,12 @@ public class ProjectService {
         project.setLink(dto.getLink());
         project.setUser(user);
         project.setCategory(category);
+
+
         project.setSkills(skills);
 
-        // IMAGE
+
+        // IMAGE UPLOAD
         if (image != null && !image.isEmpty()) {
 
             String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
@@ -91,36 +98,19 @@ public class ProjectService {
         project.setLink(dto.getLink());
         project.setCategory(category);
 
-        List<Skill>skills=skillRepository.findAllById(dto.getSkillId());
+        List<Skill> skills = new ArrayList<>();
+
+        if (dto.getSkillIds() != null && !dto.getSkillIds().isEmpty()) {
+            skills = skillRepository.findAllById(dto.getSkillIds());
+        }
+
         project.setSkills(skills);
 
         projectRepository.save(project);
     }
 
-    // READ ALL DTO
-    public List<ProjectDto> getAll() {
-        return projectRepository.findAll()
-                .stream()
-                .map(this::mapToDto)
-                .toList();
-    }
-
-    // READ ONE
-    public ProjectDto getById(Long id) {
-
-        Project project = projectRepository.findById(id)
-                .orElseThrow();
-
-        return mapToDto(project);
-    }
-
-    // DELETE
-    public void delete(Long id) {
-        projectRepository.deleteById(id);
-    }
-
     // FILTER
-    public List<Project> filterPublic(String search, Long categoryId, List<Long> skillId) {
+    public List<Project> filterPublic(String search, Long categoryId, List<Long> skillIds) {
 
         List<Project> projects = projectRepository.findAll();
 
@@ -137,15 +127,38 @@ public class ProjectService {
                     .toList();
         }
 
-        if (skillId != null && !skillId.isEmpty()) {
+        if (skillIds != null && !skillIds.isEmpty()) {
 
             projects = projects.stream()
                     .filter(p -> p.getSkills() != null &&
                             p.getSkills().stream()
-                                    .anyMatch(s -> skillId.contains(s.getId())))
+                                    .anyMatch(s -> skillIds.contains(s.getId())))
                     .toList();
         }
+
         return projects;
+    }
+
+    // GET ALL DTO
+    public List<ProjectDto> getAll() {
+        return projectRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    // GET BY ID
+    public ProjectDto getById(Long id) {
+
+        Project project = projectRepository.findById(id)
+                .orElseThrow();
+
+        return mapToDto(project);
+    }
+
+    // DELETE
+    public void delete(Long id) {
+        projectRepository.deleteById(id);
     }
 
     // MAPPER
@@ -159,7 +172,7 @@ public class ProjectService {
         dto.setLink(project.getLink());
 
         if (project.getSkills() != null) {
-            dto.setSkillId(
+            dto.setSkillIds(
                     project.getSkills()
                             .stream()
                             .map(Skill::getId)
@@ -170,12 +183,19 @@ public class ProjectService {
         return dto;
     }
 
-    public void assignSkills(Long projectId, List<Long> skillId) {
-        Project project = projectRepository.findById(projectId).orElseThrow();
+    // ASSIGN SKILLS
+    public void assignSkills(Long projectId, List<Long> skillIds) {
 
-        List<Skill> skills = skillRepository.findAllById(skillId);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow();
+
+        List<Skill> skills = new ArrayList<>();
+
+        if (skillIds != null && !skillIds.isEmpty()) {
+            skills = skillRepository.findAllById(skillIds);
+        }
+
         project.setSkills(skills);
         projectRepository.save(project);
-
     }
 }
