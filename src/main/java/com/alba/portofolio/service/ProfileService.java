@@ -20,7 +20,9 @@ public class ProfileService {
     private final UserRepository userRepository;
 
     public Profile getProfileByUser(String email) {
+
         AppUser user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        return profileRepository.findByUserId(user.getId()).orElse(new Profile());
+
+        return profileRepository.findByUserId(user.getId()).orElseThrow(()->new RuntimeException("Profile not found"));
     }
 }

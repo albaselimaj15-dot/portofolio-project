@@ -1,5 +1,6 @@
 package com.alba.portofolio.controller;
 
+import com.alba.portofolio.Activity.ActivityService.ActivityService;
 import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Skill;
 import com.alba.portofolio.enums.Role;
@@ -19,11 +20,13 @@ public class SkillPageController {
     private final SkillRepository skillRepository;
     private final UserRepository userRepository;
     private final SkillService skillService;
+    private final ActivityService activityService;
 
-    public SkillPageController(SkillRepository skillRepository, UserRepository userRepository, SkillService skillService) {
+    public SkillPageController(SkillRepository skillRepository, UserRepository userRepository, SkillService skillService, ActivityService activityService) {
         this.skillRepository = skillRepository;
         this.userRepository = userRepository;
         this.skillService = skillService;
+        this.activityService = activityService;
     }
 
     @GetMapping
@@ -55,6 +58,7 @@ public class SkillPageController {
         skill.setUser(user);
 
         skillRepository.save(skill);
+        activityService.log("Skill created");
 
         return "redirect:/skills";
     }
@@ -66,6 +70,7 @@ public class SkillPageController {
 
       model.addAttribute("skill",skill);
 
+
         return "edit-skill";
     }
     @PreAuthorize("hasRole('ADMIN')")
@@ -76,6 +81,7 @@ public class SkillPageController {
         String email = auth.getName();
 
         skillService.updateWithUser(skill, email);
+        activityService.log( "Skill updated");
 
         return "redirect:/skills";
     }
@@ -84,6 +90,7 @@ public class SkillPageController {
     public String delete(@PathVariable Long id) {
 
         skillRepository.deleteById(id);
+        activityService.log( "Skill deleted");
 
         return "redirect:/skills";
     }

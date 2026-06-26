@@ -3,10 +3,15 @@ package com.alba.portofolio.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Project {
 
     @Id
@@ -23,6 +28,7 @@ public class Project {
     @NotBlank
     private String link;
 
+    private String imageUrl;
 
 
     @ManyToOne
@@ -32,6 +38,19 @@ public class Project {
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
+
+    @ManyToMany
+    @JoinTable(
+            name="project_skills",
+            joinColumns =@JoinColumn(name="project_id"),
+            inverseJoinColumns = @JoinColumn(name="skill_id")
+    )
+    private List<Skill> skills;
+
+    @Override
+    public String toString() {
+        return "Project{id=" + id + ", title='" + title + "'}";
+    }
 
 
 }

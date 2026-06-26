@@ -2,9 +2,11 @@ package com.alba.portofolio.Config;
 
 
 import com.alba.portofolio.repository.UserRepository;
+import com.alba.portofolio.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,7 +26,9 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/css/**", "/img/**", "/error").permitAll()
+                        .requestMatchers("/login", "/register", "/css/**", "/img/**", "/error", "/portofolio",
+                                "/portofolio/**",
+                                "/uploads/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/projects/**", "/skills/**", "/profile/**").hasAnyRole("USER","ADMIN")
@@ -50,4 +54,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
