@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Project</title>
+</head>
+<body>
+
+<h2>Edit Project</h2>
+
+<form th:action="@{/projects/update/{id}(id=${project.id})}"
+      th:object="${project}"
+      method="post"
+      enctype="multipart/form-data">
+    <!-- ID -->
+    <input type="hidden" th:field="*{id}" />
+
+    <!--Image-->
+
+    <label>Image</label>
+    <input type="file" name="image">
+    <br><br>
+
+    <!-- TITLE -->
+    <label>Title</label>
+    <input type="text" th:field="*{title}" placeholder="Title" />
+    <br><br>
+
+    <!-- DESCRIPTION -->
+    <label>Description</label>
+    <input type="text" th:field="*{description}" placeholder="Description" />
+    <br><br>
+
+    <!-- LINK -->
+    <label>Link</label>
+    <input type="text" th:field="*{link}" placeholder="Link" />
+    <br><br>
+
+    <!-- CATEGORY -->
+    <label>Category</label>
+    <select name="categoryId">
+
+        <option th:each="c : ${categories}"
+                th:value="${c.id}"
+                th:text="${c.name}"
+                th:selected="${project.categoryId == c.id}">
+        </option>
+
+    </select>
+    <br><br>
+
+    <!-- SKILLS -->
+    <label>Skills</label>
+    <select name="skillIds" multiple>
+        <option th:each="s : ${skills}"
+                th:value="${s.id}"
+                th:text="${s.name}">
+        </option>
+    </select>
+    <br><br>
+
+    <!-- SUBMIT -->
+    <button id="updateBtn"
+            type="submit"
+            class="btn btn-success">
+        Update Project
+    </button>
+
+</form>
+
+</body>
+
+<script>
+
+    document.querySelector("form").addEventListener("submit", function () {
+
+        let btn = document.getElementById("updateBtn");
+
+        btn.disabled = true;
+
+        btn.innerHTML =
+            'Updating <span class="spinner-border spinner-border-sm"></span>';
+
+    });
+
+</script>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+</head>
+<body>
+
+<h2>Register</h2>
+<div th:if="${param.error}" style="color:red;">
+
+    <span th:if="${param.error[0]=='username_empty'}">
+        Username is required
+    </span>
+
+    <span th:if="${param.error[0]=='email_empty'}">
+        Email is required
+    </span>
+
+    <span th:if="${param.error[0]=='password_empty'}">
+        Password is required
+    </span>
+
+    <span th:if="${param.error[0]=='email_exists'}">
+        Email already exists
+    </span>
+
+    <span th:if="${param.error[0]=='password_mismatch'}">
+        Passwords do not match
+    </span>
+
+    <span th:if="${param.error[0]=='username_exists'}">
+        Username already exists
+    </span>
+
+    <span th:if="${param.error[0]=='password_short'}">
+        Password must be at least 6 characters
+    </span>
+
+</div>
+<form th:action="@{/register}" th:object="${user}" method="post">
+    <input type="text" th:field="*{username}">
+    <input type="text" th:field="*{email}">
+    <input type="password" th:field="*{password}">
+    <input type="password" name="confirmPassword">
+    <button type="submit">Register</button>
+</form>
+
+</body>
+</html>

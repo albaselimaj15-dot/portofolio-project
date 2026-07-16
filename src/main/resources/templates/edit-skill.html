@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Skill</title>
+</head>
+<body>
+
+<h2>Edit Skill</h2>
+<form th:action="@{/skills/update}" method="post">
+
+    <input type="hidden"
+           name="id"
+           th:value="${skill.id}" />
+
+    <label>Name:</label>
+    <input type="text"
+           name="name"
+           th:value="${skill.name}" />
+
+    <br><br>
+
+    <label>Level:</label>
+    <select name="level">
+
+        <option th:selected="${skill.level=='BEGINNER'}">
+            BEGINNER
+        </option>
+
+        <option th:selected="${skill.level=='INTERMEDIATE'}">
+            INTERMEDIATE
+        </option>
+
+        <option th:selected="${skill.level=='ADVANCED'}">
+            ADVANCED
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <button id="updateBtn" type="submit">
+        Update
+    </button>
+
+
+</form>
+
+</body>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function () {
+
+        let btn = document.getElementById("updateBtn");
+
+        btn.disabled = true;
+
+        btn.innerHTML =
+            'Updating <span class="spinner-border spinner-border-sm"></span>';
+    });
+</script>
+</html>

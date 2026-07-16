@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Project</title>
+</head>
+<body>
+
+<h2>Create Project</h2>
+
+<form th:action="@{/projects}"
+      th:object="${project}"
+      method="post"
+      enctype="multipart/form-data">
+
+
+    <label>Title</label>
+    <input type="text" th:field="*{title}">
+
+    <p th:if="${#fields.hasErrors('title')}"
+       th:errors="*{title}"
+       style="color:red">
+    </p>
+
+
+    <br><br>
+
+
+    <label>Category</label>
+
+    <select th:field="*{categoryId}">
+        <option value="">Select Category</option>
+
+        <option th:each="c : ${categories}"
+                th:value="${c.id}"
+                th:text="${c.name}">
+        </option>
+
+    </select>
+
+    <p th:if="${#fields.hasErrors('categoryId')}"
+       th:errors="*{categoryId}"
+       style="color:red">
+    </p>
+
+
+    <br><br>
+
+
+    <label>Skills</label>
+
+    <select th:field="*{skillIds}"
+            multiple>
+
+        <option th:each="s : ${skills}"
+                th:value="${s.id}"
+                th:text="${s.name}">
+        </option>
+
+    </select>
+
+    <br><br>
+
+
+    <label>Description</label>
+    <textarea th:field="*{description}"></textarea>
+
+    <p th:if="${#fields.hasErrors('description')}"
+       th:errors="*{description}"
+       style="color:red">
+    </p>
+
+
+    <br><br>
+
+
+    <label>Link</label>
+    <input type="text" th:field="*{link}">
+
+    <p th:if="${#fields.hasErrors('link')}"
+       th:errors="*{link}"
+       style="color:red">
+    </p>
+
+
+    <br><br>
+
+
+    <label>Image</label>
+    <input type="file" name="image">
+
+
+    <br><br>
+
+
+    <button id="saveBtn"
+            type="submit"
+            class="btn btn-success">
+
+        Save Project
+
+    </button>
+
+</form>
+<script>
+
+    document.querySelector("form").addEventListener("submit", function () {
+
+        let btn = document.getElementById("saveBtn");
+
+        btn.disabled = true;
+
+        btn.innerHTML =
+            'Saving <span class="spinner-border spinner-border-sm"></span>';
+
+    });
+
+</script>
+
+
+
+</body>
+
+
+</html>

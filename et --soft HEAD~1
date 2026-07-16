@@ -1,0 +1,33 @@
+[33m0eae641[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m fix skills buttons
+[33m6cf01d3[m[33m ([m[1;31morigin/main[m[33m)[m Updated README with project details and screenshots
+[33m36883a7[m Added application screenshots
+[33m592147e[m Completed testing, fixed bugs, added messages and improved user experience
+[33md7d1a73[m Fix project categorization and add success messages
+[33m3484ba2[m Update profile management and configuration
+[33md6abb76[m Removed REST API and added project README documentation
+[33m303640d[m Add authorization rules and fix project configuration
+[33m2456193[m Add home redirect
+[33m3c00391[m fix image upload
+[33m38ff995[m debug image upload
+[33m24dc992[m fix uploads resource path
+[33m1e4489e[m fix categorize url
+[33m6a4cae1[m fix project categorize save
+[33m2315b81[m Fix categorize skill mapping
+[33m8faa4db[m Fix project create form action
+[33md9b8d3e[m Fix skill user relation
+[33me821c86[m Fix Docker mvnw permission
+[33me7c625b[m Add Dockerfile for deployment
+[33m5c8dee3[m Add Docker configuration
+[33m8e00275[m Prepare project for deployment
+[33m57afd0d[m integrate dashboard, projects, profile and authentication modules
+[33m57a4572[m integrate dashboard, projects, profile and authentication modules
+[33m6b73199[m Project Categories Management can :CreateCategories ,Edit Categories ,Delete Categories
+[33m09e9f8d[m Making changes in classes
+[33m4db2769[m Adding entity field  imageurl
+[33m80a7c10[m Add profile image upload functionality Implement project image upload with file storage Add dashboard analytics for projects, skills and activities Implement CRUD operations for project categories Enable live portfolio preview with real-time updates Add search and filtering for projects by category and skills Improve responsive layout for mobile and tablet devices Fix null pointer exception in profile image rendering
+[33m5141e89[m Implemented admin dashboard features with role-based access, CRUD operations, search/filter, and analytics.
+[33m4bef425[m Implemented admin dashboard features with role-based access, CRUD operations, search/filter, and analytics.
+[33m3c96ba5[m Removal of profile from dashboard
+[33m2d5814d[m Removal of profile from dashboard
+[33m5dc4e57[m Changes of project: add, edit ,delete, categorize. Changes of skill :add, edit, delete. Update of profile. Addition of search project , filter project . Update of dashboard(toal projects, total skills , categories)
+[33m4c73dbb[m initial commit

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Profile</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="d-flex">
+
+    <!-- SIDEBAR -->
+    <div th:replace="~{fragments/sidebar :: div}">
+    </div>
+
+    <!-- CONTENT -->
+    <div class="container mt-5">
+        <!-- SUCCESS MESSAGE -->
+
+        <div th:if="${success}"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <span th:text="${success}"></span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+
+
+        <!-- ERROR MESSAGE -->
+
+        <div th:if="${error}"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <span th:text="${error}"></span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+        <!-- PROFILE CARD -->
+        <div class="card shadow p-4">
+
+            <h2 class="mb-4">
+                Profile
+            </h2>
+
+            <form th:action="@{/profile/update}"
+                  th:object="${profile}"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <!-- USERNAME -->
+                <label class="form-label">
+                    Username
+                </label>
+
+                <input type="text"
+                       class="form-control mb-3"
+                       th:value="${loggedUser.username}"
+                       readonly>
+
+                <!-- EMAIL -->
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input type="text"
+                       class="form-control mb-3"
+                       th:value="${loggedUser.email}"
+                       readonly>
+
+                <input type="hidden"
+                       name="email"
+                       th:value="${loggedUser.email}">
+                <!-- FULL NAME -->
+                <label class="form-label">
+                    Full Name
+                </label>
+
+                <input type="text"
+                       th:field="*{fullName}"
+                       class="form-control mb-3">
+
+                <!-- ABOUT -->
+                <label class="form-label">
+                    About
+                </label>
+
+                <textarea
+                        th:field="*{about}"
+                        class="form-control mb-3"
+                        rows="4">
+                 </textarea>
+
+
+
+                <!-- CURRENT PICTURE -->
+                <label class="form-label">
+                    Current Picture
+                </label>
+
+                <br>
+
+                <img th:if="${profile.profileImage != null}"
+                     th:src="@{'/uploads/profiles/' + ${profile.profileImage}}"
+                     width="150"
+                     height="150"
+                     class="rounded-circle mb-3">
+
+
+                <img th:unless="${profile.profileImage != null}"
+                     src="/images/default-avatar.png"
+                     width="150"
+                     height="150"
+                     class="rounded-circle mb-3">
+
+                <!-- CHANGE PICTURE -->
+                <label class="form-label">
+                    Change Picture
+                </label>
+
+                <input type="file"
+                       name="image"
+                       class="form-control mb-3">
+
+                <!-- SAVE -->
+                <button type="submit"
+                        class="btn btn-success">
+
+                    Save
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+
+
+        <!-- CHANGE PASSWORD CARD -->
+
+        <div class="card shadow p-4 mt-4">
+
+            <h2 class="mb-4">
+                Change Password
+            </h2>
+
+            <form th:action="@{/profile/change-password}"
+                  method="post">
+
+                <!-- OLD PASSWORD -->
+
+                <label class="form-label">
+                    Old Password
+                </label>
+
+                <input type="password"
+                       name="currentPassword"
+                       class="form-control mb-3">
+
+                <!-- NEW PASSWORD -->
+
+                <label class="form-label">
+                    New Password
+                </label>
+
+                <input type="password"
+                       name="newPassword"
+                       class="form-control mb-3">
+
+                <!-- CONFIRM PASSWORD -->
+
+                <label class="form-label">
+                    Confirm Password
+                </label>
+
+                <input type="password"
+                       name="confirmPassword"
+                       class="form-control mb-3">
+
+                <!-- SAVE PASSWORD -->
+
+                <button type="submit"
+                        class="btn btn-warning">
+
+                    Save Password
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div> <!-- END CONTENT -->
+
+</div> <!-- END d-flex -->
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+
+</html>

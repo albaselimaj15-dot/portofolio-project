@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>My Projects</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+
+<body class="container mt-4">
+
+
+<h2 class="mb-3">My Projects</h2>
+
+
+<!-- ================= ALERTS ================= -->
+
+<div th:if="${successMessage}"
+     class="alert alert-success">
+
+    <span th:text="${successMessage}"></span>
+
+</div>
+
+
+<div th:if="${errorMessage}"
+     class="alert alert-danger">
+
+    <span th:text="${errorMessage}"></span>
+
+</div>
+
+
+
+<!-- ================= ADD PROJECT BUTTON ================= -->
+
+<div th:if="${isAdmin}" class="mb-4">
+
+    <a th:href="@{/projects/create}"
+       class="btn btn-success">
+        Add Project
+    </a>
+
+</div>
+
+
+
+
+<!-- ================= FILTER ================= -->
+
+
+<div class="card p-3 mb-4">
+
+
+    <form method="get"
+          action="/projects">
+
+
+        <input type="text"
+               name="search"
+               class="form-control mb-2"
+               placeholder="Search...">
+
+
+        <select name="categoryId"
+                class="form-select mb-2">
+
+
+            <option value="">
+                All Categories
+            </option>
+
+
+            <option th:each="c : ${categories}"
+                    th:value="${c.id}"
+                    th:text="${c.name}">
+            </option>
+
+
+        </select>
+
+
+
+        <select name="skillIds"
+                class="form-select mb-2"
+                multiple>
+
+
+            <option th:each="s : ${skills}"
+                    th:value="${s.id}"
+                    th:text="${s.name}">
+            </option>
+
+
+        </select>
+
+
+
+        <button class="btn btn-primary">
+            Filter
+        </button>
+
+
+    </form>
+
+
+</div>
+
+
+
+
+
+
+<!-- ================= TABLE ================= -->
+
+
+<table class="table table-bordered">
+
+
+    <thead>
+
+    <tr>
+
+        <th>ID</th>
+
+        <th>Title</th>
+
+        <th>Description</th>
+
+        <th>Link</th>
+
+        <th>Image</th>
+
+        <th th:if="${isAdmin}">
+            Actions
+        </th>
+
+
+    </tr>
+
+
+    </thead>
+
+
+
+
+    <tbody>
+
+    <!--NO PROJECTS FOUND -->
+
+    <tr th:if="${projects == null or projects.isEmpty()}">
+        <td colspan="6" class="text-center">
+
+            <h5>No projects found.</h5>
+
+            <p>Create your first project to get started.</p>
+
+            <a th:if="${isAdmin}"
+               th:href="@{/projects/create}"
+               class="btn btn-success">
+                Add Project
+            </a>
+
+        </td>
+    </tr>
+
+    <!--LIST-->
+
+    <tr th:each="project : ${projects}">
+
+
+        <td th:text="${project.id}"></td>
+
+
+        <td th:text="${project.title}"></td>
+
+
+        <td th:text="${project.description}"></td>
+
+
+
+        <td>
+
+            <a th:href="${project.link}"
+               target="_blank">
+
+                Open
+
+            </a>
+
+        </td>
+
+
+
+        <td>
+
+            <img th:if="${project.imageUrl != null}"
+                 th:src="${project.imageUrl}"
+                 width="80">
+
+        </td>
+
+
+
+
+
+        <td th:if="${isAdmin}">
+
+
+
+            <form th:action="@{/projects/edit/{id}(id=${project.id})}"
+                  method="get"
+                  style="display:inline;">
+
+
+                <button class="btn btn-primary btn-sm">
+
+                    Edit
+
+                </button>
+
+
+            </form>
+
+
+
+
+
+            <form th:action="@{/projects/delete/{id}(id=${project.id})}"
+                  method="post"
+                  style="display:inline;">
+
+
+                <button
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Are you sure you want to delete this project?')">
+                    Delete
+                </button>
+
+
+            </form>
+
+
+
+
+
+            <form th:action="@{/projects/categorize/{id}(id=${project.id})}"
+                  method="get"
+                  style="display:inline;">
+
+
+                <button class="btn btn-warning btn-sm">
+
+                    Categorize
+
+                </button>
+
+
+            </form>
+
+
+
+        </td>
+
+
+
+    </tr>
+
+
+    </tbody>
+
+
+</table>
+
+
+
+</body>
+
+</html>

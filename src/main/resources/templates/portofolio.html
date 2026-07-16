@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Portfolio</title>
+</head>
+<body>
+
+<h1>My Portfolio</h1>
+
+<div th:each="p : ${projects}">
+
+    <h2 th:text="${p.title}"></h2>
+
+    <p th:text="${p.description}"></p>
+
+    <!-- IMAGE (LIST VIEW) -->
+    <img th:if="${p.imageUrl != null}"
+         th:src="${#strings.replace(p.imageUrl,' ','%20')}"
+         width="120">
+
+    <br>
+
+    <!-- VIEW DETAILS -->
+    <a th:href="@{'/portofolio/project/' + ${p.id}}">
+        View Project
+    </a>
+
+    <hr>
+
+</div>
+
+</body>
+</html>

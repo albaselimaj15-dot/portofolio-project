@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div>
+
+  <h4>
+    Dashboard
+  </h4>
+
+  <a href="/dashboard">
+    Dashboard
+  </a>
+  <br>
+
+  <a href="/projects">
+    Projects
+  </a>
+  <br>
+
+  <a href="/categories">
+    Categories
+  </a>
+  <br>
+
+  <a href="/skills">
+    Skills
+  </a>
+  <br>
+
+  <a href="/profile">
+    Profile
+  </a>
+  <br>
+
+
+  <form th:action="@{/logout}" method="post">
+
+    <button class="btn btn-danger mt-3">
+      Logout
+    </button>
+
+  </form>
+
+</div>
+
+</html>n
