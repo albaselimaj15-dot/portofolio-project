@@ -105,14 +105,6 @@
 
             <tbody>
 
-            <!-- Empty State -->
-            <tr th:if="${skills == null or skills.isEmpty()}">
-                <td colspan="4" class="text-center">
-                    <h5>No skills found.</h5>
-                    <p>Click "Add Skill" to create your first skill.</p>
-                </td>
-            </tr>
-
 
             <tr th:each="skill : ${skills}">
 
@@ -144,6 +136,16 @@
                 </td>
 
             </tr>
+
+            <!-- Empty State -->
+            <tr th:if="${skills == null or skills.isEmpty()}">
+                <td colspan="4" class="text-center">
+                    <h5>No skills found.</h5>
+                    <p>Click "Add Skill" to create your first skill.</p>
+                </td>
+            </tr>
+
+
 
 
             </tbody>
