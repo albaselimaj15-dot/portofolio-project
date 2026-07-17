@@ -46,6 +46,23 @@ public class SkillPageController {
         return "skills";
     }
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/create")
+    public String createSkill(Model model, Authentication auth) {
+
+        String email = auth.getName();
+
+        AppUser user = userRepository.findByEmail(email)
+                .orElseThrow();
+
+        boolean isAdmin = user.getRole() == Role.ADMIN;
+
+        model.addAttribute("skill", new Skill());
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("skills", skillService.getAll());
+
+        return "skills";
+    }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
     public String saveSkill(@Valid @ModelAttribute("skill") Skill skill, BindingResult result,
                             Authentication auth,Model model,
