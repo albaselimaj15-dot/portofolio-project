@@ -111,26 +111,31 @@ public class ProjectService {
         project.setLink(dto.getLink());
 
 
-        // IMAGE UPDATE
+        /// IMAGE UPLOAD
         if (image != null && !image.isEmpty()) {
 
-            String fileName = System.currentTimeMillis()
-                    + "_" + image.getOriginalFilename();
+            String originalName = image.getOriginalFilename()
+                    .replace(" ", "_");
 
-            String uploadDir = "uploads/";
+            String fileName = System.currentTimeMillis() + "_" + originalName;
+
+            Path uploadPath = Paths.get("uploads/projects");
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            Path filePath = uploadPath.resolve(fileName);
 
             Files.copy(
                     image.getInputStream(),
-                    Paths.get(uploadDir + fileName),
+                    filePath,
                     StandardCopyOption.REPLACE_EXISTING
             );
 
-            project.setImageUrl("/uploads/" + fileName);
+            project.setImageUrl("/uploads/projects/" + fileName);
         }
-
-        projectRepository.save(project);
     }
-
         //FILTER
     public List<Project> filterPublic(String search, Long categoryId, List<Long> skillIds) {
 
