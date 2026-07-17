@@ -75,14 +75,18 @@ public class SkillPageController {
         return "redirect:/skills";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/edit/{id}")
-    public String editSkill(@PathVariable Long id,Model model) {
+    public String editSkill(@PathVariable Long id, Model model, Authentication auth) {
 
-      Skill skill=skillService.findById(id);
+        String email = auth.getName();
+        AppUser user = userRepository.findByEmail(email).orElseThrow();
 
-      model.addAttribute("skill",skill);
+        boolean isAdmin = user.getRole() == Role.ADMIN;
 
+        Skill skill = skillService.findById(id);
+
+        model.addAttribute("skill", skill);
+        model.addAttribute("isAdmin", isAdmin);
 
         return "edit-skill";
     }
