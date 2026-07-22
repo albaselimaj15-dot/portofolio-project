@@ -403,18 +403,14 @@ For production scalability, cloud storage integration can be added in the future
 
 ## Dashboard
 
-![Dashboard](screenshots/dashboard.png.png)
+![Dashboard](screenshots/dashboard.png)
 
 
 ## Projects
 
-![Projects](screenshots/projects.png)
+![Projects](screenshots/projects-page.png)
 
 
-
-## Categories
-
-![Categories](screenshots/category.png)
 
 
 ## Profile
@@ -422,14 +418,10 @@ For production scalability, cloud storage integration can be added in the future
 ![Profile](screenshots/profile.png)
 
 
-## Admin Skills
 
-![Admin Skills](screenshots/admin-skills.png)
+## Register
 
-
-## Public Portfolio
-
-![Public Portfolio](screenshots/public-portofolio.png)
+![Register](screenshots/.png)
 
 ---
 
