@@ -194,8 +194,11 @@
         <td>
 
             <img th:if="${project.imageUrl != null}"
-                 th:src="${project.imageUrl}"
-                 width="80">
+                 th:src="${project.imageUrl.startsWith('http')
+                         ? project.imageUrl
+                          : '/uploads/projects/' + project.imageUrl}"
+                 width="80"
+                 alt="Project Image">
 
         </td>
 

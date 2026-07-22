@@ -11,12 +11,11 @@ import com.alba.portofolio.repository.ProjectRepository;
 import com.alba.portofolio.repository.SkillRepository;
 import com.alba.portofolio.repository.UserRepository;
 
-import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,6 +23,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.util.Map;
 @Service
 public class ProjectService {
 
@@ -31,15 +36,24 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final SkillRepository skillRepository;
     private final CategoryRepository categoryRepository;
+    private final Cloudinary cloudinary;
+
+
+    @Value("${storage.type}")
+    private String storageType;
+
 
     public ProjectService(ProjectRepository projectRepository,
                           UserRepository userRepository,
                           SkillRepository skillRepository,
-                          CategoryRepository categoryRepository) {
+                          CategoryRepository categoryRepository,
+                          Cloudinary cloudinary) {
+
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.skillRepository = skillRepository;
         this.categoryRepository = categoryRepository;
+        this.cloudinary = cloudinary;
     }
 
     // CREATE
@@ -70,31 +84,56 @@ public class ProjectService {
 
         project.setSkills(skills);
 
-
-        // IMAGE UPLOAD
+// IMAGE UPLOAD
         if (image != null && !image.isEmpty()) {
 
-            String originalName = image.getOriginalFilename()
-                    .replace(" ", "_");
 
-            String fileName = System.currentTimeMillis() + "_" + originalName;
+            if(storageType.equals("cloudinary")) {
 
-            Path uploadPath = Paths.get("uploads");
 
-            if (!Files.exists(uploadPath)) {
+                Map uploadResult = cloudinary.uploader().upload(
+                        image.getBytes(),
+                        ObjectUtils.emptyMap()
+                );
+
+
+                String imageUrl = uploadResult
+                        .get("secure_url")
+                        .toString();
+
+
+                project.setImageUrl(imageUrl);
+
+
+            } else {
+
+
+                String originalName = image.getOriginalFilename()
+                        .replace(" ", "_");
+
+
+                String fileName = System.currentTimeMillis()
+                        + "_"
+                        + originalName;
+
+
+                Path uploadPath = Paths.get("uploads");
+
+
                 Files.createDirectories(uploadPath);
+
+
+                Files.copy(
+                        image.getInputStream(),
+                        uploadPath.resolve(fileName),
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+
+                project.setImageUrl("/uploads/" + fileName);
+
             }
-
-            Path filePath = uploadPath.resolve(fileName);
-
-            Files.copy(image.getInputStream(),
-                    filePath,
-                    StandardCopyOption.REPLACE_EXISTING);
-
-
-            project.setImageUrl("/uploads/" + fileName);
         }
-
         return projectRepository.save(project);
 
     }
@@ -111,29 +150,55 @@ public class ProjectService {
         project.setLink(dto.getLink());
 
 
-        /// IMAGE UPLOAD
+        // IMAGE UPLOAD
         if (image != null && !image.isEmpty()) {
 
-            String originalName = image.getOriginalFilename()
-                    .replace(" ", "_");
 
-            String fileName = System.currentTimeMillis() + "_" + originalName;
+            if (storageType.equals("cloudinary")) {
 
-            Path uploadPath = Paths.get("uploads/projects");
 
-            if (!Files.exists(uploadPath)) {
+                Map uploadResult = cloudinary.uploader().upload(
+                        image.getBytes(),
+                        ObjectUtils.emptyMap()
+                );
+
+
+                String imageUrl = uploadResult
+                        .get("secure_url")
+                        .toString();
+
+
+                project.setImageUrl(imageUrl);
+
+
+            } else {
+
+
+                String originalName = image.getOriginalFilename()
+                        .replace(" ", "_");
+
+
+                String fileName = System.currentTimeMillis()
+                        + "_"
+                        + originalName;
+
+
+                Path uploadPath = Paths.get("uploads/projects");
+
+
                 Files.createDirectories(uploadPath);
+
+
+                Files.copy(
+                        image.getInputStream(),
+                        uploadPath.resolve(fileName),
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+
+                project.setImageUrl("/uploads/projects/" + fileName);
+
             }
-
-            Path filePath = uploadPath.resolve(fileName);
-
-            Files.copy(
-                    image.getInputStream(),
-                    filePath,
-                    StandardCopyOption.REPLACE_EXISTING
-            );
-
-            project.setImageUrl("/uploads/projects/" + fileName);
         }
     }
         //FILTER

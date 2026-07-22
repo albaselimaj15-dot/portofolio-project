@@ -115,12 +115,11 @@
                 </label>
 
                 <br>
-
                 <img th:if="${profile.profileImage != null}"
-                     th:src="@{'/uploads/profiles/' + ${profile.profileImage}}"
-                     width="150"
-                     height="150"
-                     class="rounded-circle mb-3">
+                     th:src="${profile.profileImage.startsWith('http')
+                             ? profile.profileImage
+                               : '/uploads/profiles/' + profile.profileImage}"
+                     alt="Profile Image">
 
 
                 <img th:unless="${profile.profileImage != null}"

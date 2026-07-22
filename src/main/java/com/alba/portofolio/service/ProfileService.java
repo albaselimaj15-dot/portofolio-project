@@ -5,6 +5,8 @@ import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Profile;
 import com.alba.portofolio.repository.ProfileRepository;
 import com.alba.portofolio.repository.UserRepository;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +16,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
+
+
+
+
 
 @Service
 public class ProfileService {
@@ -22,11 +30,18 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final Cloudinary cloudinary;
 
-    public ProfileService(ProfileRepository profileRepository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    @Value("${storage.type}")
+    private String storageType;
+
+
+
+    public ProfileService(ProfileRepository profileRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, Cloudinary cloudinary) {
         this.profileRepository = profileRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.cloudinary = cloudinary;
     }
 
 
@@ -78,36 +93,40 @@ public class ProfileService {
 
 
 
-        Path uploadPath = Paths.get("uploads", "profiles");
+        if(storageType.equals("cloudinary")) {
+
+            Map uploadResult = cloudinary.uploader().upload(
+                    image.getBytes(),
+                    ObjectUtils.emptyMap()
+            );
+
+            String imageUrl = uploadResult.get("secure_url").toString();
+
+            profile.setProfileImage(imageUrl);
 
 
-        Files.createDirectories(uploadPath);
+        } else {
 
 
+            Path uploadPath = Paths.get("uploads", "profiles");
 
-        if(profile.getProfileImage() != null){
+            Files.createDirectories(uploadPath);
 
-            Path oldImage = uploadPath.resolve(profile.getProfileImage());
 
-            Files.deleteIfExists(oldImage);
+            String fileName = UUID.randomUUID()
+                    + "_"
+                    + image.getOriginalFilename();
+
+
+            Files.copy(
+                    image.getInputStream(),
+                    uploadPath.resolve(fileName),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+
+
+            profile.setProfileImage(fileName);
         }
-
-
-
-        String fileName = UUID.randomUUID()
-                + "_"
-                + image.getOriginalFilename();
-
-
-
-        Files.copy(
-                image.getInputStream(),
-                uploadPath.resolve(fileName),
-                StandardCopyOption.REPLACE_EXISTING
-        );
-
-
-        profile.setProfileImage(fileName);
 
 
         profileRepository.save(profile);
