@@ -1,6 +1,6 @@
 package com.alba.portofolio.service;
 
-import com.alba.portofolio.dto.SkillDto;
+
 import com.alba.portofolio.entity.AppUser;
 import com.alba.portofolio.entity.Skill;
 
@@ -10,7 +10,7 @@ import com.alba.portofolio.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

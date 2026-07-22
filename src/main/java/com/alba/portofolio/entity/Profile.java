@@ -16,6 +16,7 @@ public class Profile {
     
     private String fullName;
 
+    @Column(columnDefinition = "TEXT")
     private String about;
 
     private String profileImage;

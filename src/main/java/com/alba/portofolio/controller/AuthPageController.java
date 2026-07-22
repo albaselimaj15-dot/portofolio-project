@@ -62,6 +62,9 @@ public class AuthPageController {
             return "redirect:/register?error=email_empty";
         }
 
+        if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            return "redirect:/register?error=email_invalid";
+        }
 
         if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
             return "redirect:/register?error=password_empty";
@@ -90,7 +93,7 @@ public class AuthPageController {
 
         authService.register(request);
 
-        return "redirect:/login";
+        return "redirect:/login?success=registered";
     }
 
 }

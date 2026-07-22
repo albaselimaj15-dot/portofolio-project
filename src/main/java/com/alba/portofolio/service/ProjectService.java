@@ -266,4 +266,10 @@ public class ProjectService {
         return toDto(project);
     }
 
+
+    public Project getEntityById(Long id) {
+
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+    }
     }

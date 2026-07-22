@@ -3,47 +3,85 @@
 <head>
     <title>Register</title>
 </head>
+
 <body>
 
 <h2>Register</h2>
+
+
 <div th:if="${param.error}" style="color:red;">
 
     <span th:if="${param.error[0]=='username_empty'}">
         Username is required
     </span>
 
+
     <span th:if="${param.error[0]=='email_empty'}">
         Email is required
     </span>
+
+
+    <span th:if="${param.error[0]=='email_invalid'}">
+        Invalid email format
+    </span>
+
 
     <span th:if="${param.error[0]=='password_empty'}">
         Password is required
     </span>
 
+
     <span th:if="${param.error[0]=='email_exists'}">
         Email already exists
     </span>
+
 
     <span th:if="${param.error[0]=='password_mismatch'}">
         Passwords do not match
     </span>
 
+
     <span th:if="${param.error[0]=='username_exists'}">
         Username already exists
     </span>
+
 
     <span th:if="${param.error[0]=='password_short'}">
         Password must be at least 6 characters
     </span>
 
+
 </div>
+
+
 <form th:action="@{/register}" th:object="${user}" method="post">
+
+    <label>Username:</label>
     <input type="text" th:field="*{username}">
+    <br><br>
+
+
+    <label>Email:</label>
     <input type="text" th:field="*{email}">
+    <br><br>
+
+
+    <label>Password:</label>
     <input type="password" th:field="*{password}">
+    <br><br>
+
+
+    <label>Confirm Password:</label>
     <input type="password" name="confirmPassword">
-    <button type="submit">Register</button>
+    <br><br>
+
+
+    <button type="submit">
+        Register
+    </button>
+
 </form>
+
 
 </body>
 </html>

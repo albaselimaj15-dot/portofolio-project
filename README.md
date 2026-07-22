@@ -1,48 +1,114 @@
-# Portfolio Management System
+## Portfolio Management System
 
 A web application built with **Java Spring Boot, Thymeleaf, Spring Security, Hibernate and MySQL** for managing portfolio projects.
 
-The application allows administrators to manage projects, skills, categories and users. Users can create accounts, update their profiles, change passwords and upload profile images.
+The application allows administrators to manage projects, skills, categories and users. Users can create accounts, manage their profiles, upload profile images and interact with portfolio content.
 
 ---
 
-## Features
+# Features
 
-### Authentication
+## Authentication
+
 - User registration
 - Login and logout
 - Password encryption
-- Role-based access (ADMIN / USER)
-- Protected admin actions with Spring Security
+- Role-based access control (ADMIN / USER)
+- Protected admin actions using Spring Security
 
-### Dashboard
+---
+
+## Security
+
+The application includes:
+
+- BCrypt password encryption
+- Role-based authorization
+- Protected admin routes
+- Session management
+- Ownership validation for user resources
+- Input validation
+- Error handling and user feedback
+
+---
+
+## Dashboard
+
 - Project statistics
 - Skills statistics
 - Categories statistics
 - Recent activity tracking
-- Notifications
+- User activity logging
+- Notifications section
+- Role-based dashboard display
 
-### Projects
-- Create, edit and delete projects
+---
+
+## Projects
+
+- Create projects
+- Edit projects
+- Delete projects
 - Upload project images
 - Assign skills and categories
 - Search projects
-- Filter projects
+- Filter projects by category
+- Manage portfolio content
 
-### Skills & Categories
-- Add, edit and delete skills
-- Add, edit and delete categories
+---
+
+## Skills & Categories
+
+- Add skills
+- Edit skills
+- Delete skills
+- Add categories
+- Edit categories
+- Delete categories
 - Connect skills and categories with projects
 
-### Profile
-- View profile
-- Update profile information
+---
+
+## Profile Management
+
+- View profile information
+- Update profile details
 - Upload profile image
 - Change password
+- Validate required fields
+
+---
+
+# User Roles
+
+## USER
+
+Users can:
+
+- Create an account
+- Login securely
+- View dashboard
+- Manage profile information
+- Upload profile images
+- View projects, skills and categories
+- Access public portfolio pages
+
+
+## ADMIN
+
+Administrators can:
+
+- Manage users
+- Manage projects
+- Create, update and delete skills
+- Create, update and delete categories
+- Perform administrative actions
+- Manage portfolio content
 
 ---
 
 # Main Endpoints
+
 
 ## Authentication
 
@@ -93,6 +159,8 @@ POST /projects/categorize/{id}
 ```
 GET  /skills
 
+GET  /skills/create
+
 POST /skills/save
 
 GET  /skills/edit/{id}
@@ -136,7 +204,7 @@ POST /profile/change-password
 
 ---
 
-## Portfolio Preview
+## Public Portfolio
 
 ```
 GET /portofolio
@@ -158,7 +226,9 @@ GET /admin/users
 
 # Technologies
 
+
 ## Backend
+
 - Java 17
 - Spring Boot
 - Spring MVC
@@ -166,16 +236,22 @@ GET /admin/users
 - Spring Data JPA
 - Hibernate
 
+
 ## Frontend
+
 - Thymeleaf
 - HTML
 - CSS
 - Bootstrap
 
+
 ## Database
+
 - MySQL
 
+
 ## Deployment
+
 - Render
 
 ---
@@ -198,15 +274,15 @@ The project follows MVC architecture:
 ```
 Controller
 
-    ↓
+      ↓
 
 Service
 
-    ↓
+      ↓
 
 Repository
 
-    ↓
+      ↓
 
 Database
 ```
@@ -215,11 +291,13 @@ Database
 
 # Installation
 
+
 ## Requirements
 
 - Java 17+
 - Maven
 - MySQL
+
 
 ---
 
@@ -231,7 +309,7 @@ git clone repository-url
 
 ---
 
-## Database Configuration
+# Database Configuration
 
 Create a MySQL database and update:
 
@@ -251,7 +329,7 @@ spring.jpa.hibernate.ddl-auto=update
 
 ---
 
-## Run Application
+# Run Application
 
 Using Maven:
 
@@ -259,7 +337,7 @@ Using Maven:
 mvn spring-boot:run
 ```
 
-Open in browser:
+Open browser:
 
 ```
 http://localhost:8080
@@ -277,23 +355,27 @@ Deployment includes:
 - MySQL database connection
 - Environment variable configuration
 
+
 Required environment variables:
 
 ```
 DB_URL
+
 DB_USERNAME
+
 DB_PASSWORD
 ```
+
 
 Example:
 
 ```
 DB_URL=database_url
+
 DB_USERNAME=username
+
 DB_PASSWORD=password
 ```
-
-After deployment, the application can be accessed through the Render URL.
 
 ---
 
@@ -304,49 +386,89 @@ The application supports:
 - Project images
 - Profile images
 
-Images are stored locally in:
 
-```
-uploads/
-```
+Images are currently stored locally.
 
-For production environments, cloud storage can be added in the future.
+For production scalability, cloud storage integration can be added in the future.
 
 ---
 
 # Screenshots
-## Screenshots
 
-### Login
-![Login](screenshots/login.png)
 
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
+## Login Page
 
-### Projects
+![Login](screenshots/login-page.png)
+
+
+## Dashboard
+
+![Dashboard](screenshots/dashboard.png.png)
+
+
+## Projects
+
 ![Projects](screenshots/projects.png)
 
-### Skills
-![Skills](screenshots/skills.png)
 
-### Categories
-![Categories](screenshots/categories.png)
 
-### Profile
+## Categories
+
+![Categories](screenshots/category.png)
+
+
+## Profile
+
 ![Profile](screenshots/profile.png)
+
+
+## Admin Skills
+
+![Admin Skills](screenshots/admin-skills.png)
+
+
+## Public Portfolio
+
+![Public Portfolio](screenshots/public-portofolio.png)
+
+---
 
 # Testing
 
+The application was tested through functional, validation, security and UI testing.
+
+
 Completed:
 
-✅ Authentication  
-✅ CRUD operations  
-✅ Dashboard  
-✅ Search and filters  
-✅ Image upload  
-✅ Profile management  
-✅ Password change  
-✅ Deployment
+✅ Registration testing  
+✅ Login testing  
+✅ Authentication testing  
+✅ Dashboard testing  
+✅ Profile management testing  
+✅ Image upload testing  
+✅ Skills CRUD testing  
+✅ Categories CRUD testing  
+✅ Projects CRUD testing  
+✅ Search testing  
+✅ Filtering testing  
+✅ Authorization testing  
+✅ Validation testing  
+✅ Error handling testing  
+✅ Navigation testing  
+✅ UI testing  
+✅ Security testing  
+✅ Deployment testing
+
+
+---
+
+# Future Improvements
+
+Possible future improvements:
+
+- Cloud image storage integration
+
+
 
 ---
 

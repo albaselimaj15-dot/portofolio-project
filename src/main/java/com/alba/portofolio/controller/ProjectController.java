@@ -86,7 +86,6 @@ public class ProjectController {
 
     // CREATE (ONLY DTO FLOW)
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public String createProject(
             @Valid @ModelAttribute("project") ProjectDto dto,
             BindingResult result,
@@ -150,15 +149,26 @@ public class ProjectController {
 
 
     @PostMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public String update(@PathVariable Long id,
                          @Valid @ModelAttribute ProjectDto dto,
                          BindingResult result,
                          @RequestParam(required = false) Long categoryId,
                          @RequestParam(required = false) List<Long> skillIds,
                          @RequestParam(value="image", required = false) MultipartFile image,
-                         RedirectAttributes redirectAttributes)
+                         RedirectAttributes redirectAttributes,Authentication auth)
             throws IOException {
+
+
+        AppUser user = userRepository.findByEmail(auth.getName())
+                .orElseThrow();
+
+        Project project = projectService.getEntityById(id);
+
+        if (!project.getUser().getId().equals(user.getId())
+                && user.getRole() != Role.ADMIN) {
+
+            return "redirect:/projects";
+        }
 
         if(result.hasErrors()){
             return "edit-project";
@@ -184,9 +194,17 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, Model model) {
+    public String edit(@PathVariable Long id, Model model,Authentication auth) {
+
+        AppUser user=userRepository.findByEmail(auth.getName()).orElseThrow();
+        Project project=projectService.getEntityById(id);
+
+        if (!project.getUser().getId().equals(user.getId())
+                && user.getRole() != Role.ADMIN) {
+            return "redirect:/projects";
+        }
 
         model.addAttribute("project", projectService.getById(id));
         model.addAttribute("categories", categoryService.getAll());
@@ -199,9 +217,17 @@ public class ProjectController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping ("/delete/{id}")
-    public String delete(@PathVariable Long id,RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable Long id,RedirectAttributes redirectAttributes,Authentication auth) {
+
+        AppUser user=userRepository.findByEmail(auth.getName()).orElseThrow();
+        Project project=projectService.getEntityById(id);
+
+
+        if (!project.getUser().getId().equals(user.getId())
+                && user.getRole() != Role.ADMIN) {
+            return "redirect:/projects";
+        }
 
         projectService.delete(id);
         redirectAttributes.addFlashAttribute(
@@ -216,7 +242,6 @@ public class ProjectController {
 
 
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/categorize/{id}")
     public String categorizePage(@PathVariable Long id,Model model){
         model.addAttribute("project",projectService.getById(id));

@@ -1,12 +1,10 @@
 package com.alba.portofolio.Config;
 
 
-import com.alba.portofolio.repository.UserRepository;
-import com.alba.portofolio.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,7 +40,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .defaultSuccessUrl("/dashboard?success=true", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )

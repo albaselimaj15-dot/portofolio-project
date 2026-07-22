@@ -108,7 +108,30 @@ public class ProfileController {
             RedirectAttributes redirectAttributes
     ) {
 
+
+        if (profile.getFullName() == null || profile.getFullName().trim().isEmpty()) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Full name is required."
+            );
+
+            return "redirect:/profile";
+        }
+
+
+        if (profile.getAbout() == null || profile.getAbout().trim().isEmpty()) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "About field is required."
+            );
+
+            return "redirect:/profile";
+        }
+
         String result = profileService.updateProfile(email, profile, image);
+
         if (result != null) {
 
             redirectAttributes.addFlashAttribute(

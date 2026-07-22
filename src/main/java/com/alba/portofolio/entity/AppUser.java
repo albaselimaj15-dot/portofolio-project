@@ -29,8 +29,8 @@ public class AppUser {
     @NotBlank(message = "Username is required")
     private String username;
 
-    @Email(message = "Email is required")
     @NotBlank(message = "Invalid email format")
+    @Email(message = "Email is required")
     private String email;
 
 

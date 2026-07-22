@@ -120,7 +120,7 @@ public class SkillPageController {
         activityService.log( "Skill updated");
         redirectAttributes.addFlashAttribute(
                 "successMessage",
-                "Skill updated successfully"
+                "Skill updated successfully!"
         );
 
 
@@ -134,7 +134,7 @@ public class SkillPageController {
         activityService.log( "Skill deleted");
         redirectAttributes.addFlashAttribute(
                 "successMessage",
-                "Skill deleted successfully"
+                "Skill deleted successfully!"
         );
 
         return "redirect:/skills";
